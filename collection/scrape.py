@@ -6,15 +6,17 @@ from bs4 import BeautifulSoup
 
 def scrape():
     db = None
-    if not os.path.exists("blotter.db"):
+    if not os.path.exists("data.db"):
         db = init()
     else:
-        db = sqlite3.connect("blotter.db")
+        db = sqlite3.connect("data.db")
     cursor = db.cursor()
 
     highest_cfs = cursor.execute('''SELECT MAX(CFS_NUMBER) FROM callInfo''').fetchone()[0]  
     if highest_cfs is None: highest_cfs = 0
     day = datetime.datetime.today()
+    #Including the exact time of today() will result in false addition when generating timestamps.
+    day = day.replace(microsecond=0,second=0, minute=0, hour=0)
     
     while insert_to_db(day, highest_cfs, db):
         day-= datetime.timedelta(days=1)
@@ -24,7 +26,7 @@ def scrape():
 
 
 def init() -> sqlite3.Connection:
-    db = sqlite3.connect("blotter.db")
+    db = sqlite3.connect("data.db")
     cursor = db.cursor()
     cursor.execute('''
                CREATE TABLE callInfo(
@@ -85,7 +87,9 @@ def insert_to_db(day: datetime.datetime,stop:int, db:sqlite3.Connection ) -> boo
     
     if(not table_rows): return False
     cursor = db.cursor()
-    for row in table_rows:
+    # Since rows on site are earliest to latest, it needs to be reversed to match latest to earliest
+    # in order to stop at the correct CFS
+    for row in reversed(table_rows):
         if(int(row[0]) <= stop): return False
         cfs = int(row[0])
         address = row[1]
@@ -96,7 +100,6 @@ def insert_to_db(day: datetime.datetime,stop:int, db:sqlite3.Connection ) -> boo
         disposition = row[6]
         incident_id = row[7]
         
-        #TODO: Timestamp has .9 seconds tacked on
         cursor.execute('''INSERT INTO callInfo(CFS_NUMBER, CALL_DATETIME, ADDRESS, APPT_NUMBER, AGENCY, DISPOSITION, CALLTYPE)
                        VALUES (?,?,?,?,?,?,?)''', 
                        (cfs, time, address, apptno, agency, disposition, calltype))
