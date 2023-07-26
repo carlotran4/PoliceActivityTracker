@@ -1,0 +1,28 @@
+<h1> Arrest Blotter </h1>
+
+<table>
+    <tr>
+        <th>CFS #</th>
+        <th>Date/Time</th>
+        <th>Address</th>
+        <th>Appt. #</th>
+        <th>Agency</th>
+        <th>Disposition</th>
+        <th>Call Type</th>        
+        <th>Details</th>
+    </tr>
+
+    {% for entry in callBlotter %}
+        <tr>
+            <td>{{entry.cfs_number}}</td>            
+            <td>{{entry.call_datetime}}</td>
+            <td>{{entry.address}}</td>
+            <td>{{entry.appt_number}}</td>
+            <td>{{entry.agency}}</td>
+            <td>{{entry.disposition}}</td>
+            <td>{{entry.calltype}}</td>
+            <td>{{entry.details}}</td>            
+        </tr>
+    {%endfor%}
+
+<table>

@@ -1,9 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Callinfo
+from .models import Arrestinfo 
 
 # Create your views here.
 def helloWorldView(request):
     return HttpResponse("Hello World")
 
 def simpleCrimeListView(request):
-    return HttpResponse("Simple Crime List View")
+    callBlotter = Callinfo.objects.order_by("-cfs_number")[:100]
+    context = {
+        "callBlotter":callBlotter
+    }
+    return render(request, "simpleTable.html", context)
