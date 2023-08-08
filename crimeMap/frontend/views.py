@@ -7,6 +7,9 @@ from .models import Arrestinfo
 def helloWorldView(request):
     return HttpResponse("Hello World")
 
+def mapView(request):
+    return render(request, "map.html")
+
 def simpleCrimeListView(request):
     callBlotter = Callinfo.objects.order_by("-cfs_number")[:100]
     context = {

@@ -37,7 +37,9 @@ def init() -> sqlite3.Connection:
                 AGENCY TEXT,
                 DISPOSITION TEXT,
                 CALLTYPE TEXT,
-                DETAILS TEXT  
+                DETAILS TEXT,
+                LATITUDE DECIMAL(10,8),
+                LONGITUDE DECIMAL(11,8)  
                )
                ''')
     
