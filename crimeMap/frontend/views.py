@@ -8,7 +8,11 @@ def helloWorldView(request):
     return HttpResponse("Hello World")
 
 def mapView(request):
-    return render(request, "map.html")
+    callBlotter = Callinfo.objects.filter(latitude__isnull = False).order_by("-cfs_number")[:100]
+    context = {
+        "callBlotter":callBlotter
+    }
+    return render(request, "map.html", context)
 
 def simpleCrimeListView(request):
     callBlotter = Callinfo.objects.order_by("-cfs_number")[:100]

@@ -31,6 +31,8 @@ class Callinfo(models.Model):
     disposition = models.TextField(db_column='DISPOSITION', blank=True, null=True)  # Field name made lowercase.
     calltype = models.TextField(db_column='CALLTYPE', blank=True, null=True)  # Field name made lowercase.
     details = models.TextField(db_column='DETAILS', blank=True, null=True)  # Field name made lowercase.
+    latitude = models.DecimalField(db_column='LATITUDE',max_digits=10,decimal_places=8)
+    longitude = models.DecimalField(db_column="LONGITUDE",max_digits=11, decimal_places=8)
 
     def __str__(self) -> str:
         return str(self.cfs_number)
