@@ -39,7 +39,8 @@ def init() -> sqlite3.Connection:
                 CALLTYPE TEXT,
                 DETAILS TEXT,
                 LATITUDE DECIMAL(10,8),
-                LONGITUDE DECIMAL(11,8)  
+                LONGITUDE DECIMAL(11,8),
+                CAN_GEOCODE BOOLEAN  
                )
                ''')
     

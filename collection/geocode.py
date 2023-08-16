@@ -9,7 +9,7 @@ def geocode():
     insertionCursor = db.cursor()
     
     cursor.execute('''
-                   SELECT CFS_NUMBER, ADDRESS FROM callInfo WHERE LATITUDE IS NULL
+                   SELECT CFS_NUMBER, ADDRESS FROM callInfo WHERE LATITUDE IS NULL AND CAN_GEOCODE IS NULL
                    ''')
         
     for(cfs, address) in cursor:
@@ -28,13 +28,28 @@ def geocode():
             break
         if (request.status_code == 422):
             print(f"Address unprocessable. Address: {address}")
+            insertionCursor.execute('''
+                       UPDATE callInfo
+                       SET  CAN_GEOCODE = FALSE
+                       WHERE CFS_NUMBER = ?
+                       ''', (cfs,))
             continue
         
         if (noResults(request)):
             print(f"No results found. Address: {address}")
+            insertionCursor.execute('''
+                       UPDATE callInfo
+                       SET  CAN_GEOCODE = FALSE
+                       WHERE CFS_NUMBER = ?
+                       ''', (cfs,))
             continue
         
         if not locationIsAccurate(request):
+            insertionCursor.execute('''
+                       UPDATE callInfo
+                       SET  CAN_GEOCODE = FALSE
+                       WHERE CFS_NUMBER = ?
+                       ''', (cfs,))
             print(f"Address not considered accurate. Address:{address}")
             continue
         
@@ -45,7 +60,7 @@ def geocode():
         
         insertionCursor.execute('''
                        UPDATE callInfo
-                       SET LATITUDE = ?, LONGITUDE = ?
+                       SET LATITUDE = ?, LONGITUDE = ?, CAN_GEOCODE = TRUE
                        WHERE CFS_NUMBER = ?
                        ''', (latitude, longitude, cfs))
     print("Finished. Committing to database.")

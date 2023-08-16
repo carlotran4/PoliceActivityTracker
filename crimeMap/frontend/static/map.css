@@ -1,1 +1,18 @@
-#map { height: 600px;}
+#map { height: 85vh;
+    width: 70vw;
+    float: right;}
+
+h1 {size: 13vh; 
+    text-align: center;}
+
+#filter_options {
+    border: 3px solid #ff0000;
+    float:left;
+    height: 35vh;
+    width:27vw;
+}
+
+#startEndTimes {
+    width: 100%;
+    margin-top: 5%;
+}

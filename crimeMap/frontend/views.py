@@ -8,7 +8,7 @@ def helloWorldView(request):
     return HttpResponse("Hello World")
 
 def mapView(request):
-    callBlotter = Callinfo.objects.filter(latitude__isnull = False).order_by("-cfs_number")[:100]
+    callBlotter = Callinfo.objects.filter(latitude__isnull = False).order_by("-cfs_number")[:1000]
     context = {
         "callBlotter":callBlotter
     }
