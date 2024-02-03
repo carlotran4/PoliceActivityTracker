@@ -2,6 +2,8 @@ import requests
 from constants import API_KEY
 import sqlite3
 
+#FIXME: # in address breaks api?
+
 def geocode():
     db = sqlite3.connect("data.db")
     cursor = db.cursor()
@@ -20,9 +22,7 @@ def geocode():
                 break
             except (requests.exceptions.ConnectTimeout,requests.exceptions.ConnectionError):
                 input("Wifi is down. Please reconnect and press enter to continue")
-            
-        print(request.status_code)
-        
+
         if (request.status_code == 429 or request.status_code == 403):
             print("Reached daily limit")
             break
